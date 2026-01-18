@@ -67,7 +67,7 @@ class PatientBagDataset(Dataset):
     def _load_npz(self, f: Path):
         with np.load(f, allow_pickle=True) as npz:
             clouds_raw = npz["clouds"]  # (20, N, C)
-            mask_h = (npz["missing_habitats"] == 0)  # (20,) bool, True代表存在
+            mask_h = (npz["missing_habitats"] == 0)  # (20,) bool
             phys_dist_raw = npz["phys_dist_mat"]  # (20, 20)
             voxel_dist_raw = npz["voxel_dist_mat"]  # (20, 20)
             centroids_v_raw = npz["centroids_vox"]  # (20, 3)
@@ -100,9 +100,9 @@ class PatientBagDataset(Dataset):
             "clouds": clouds_feat,  # float32
             "habitat_id": habitat_id,  # int
             "phys_dist": phys_dist,  # float32
-            "voxel_dist": voxel_dist,  # float32 [新]
-            "centroids_vox": centroids_vox,  # float32 [新]
-            "centroids_phys": centroids_phys,  # float32 [新]
+            "voxel_dist": voxel_dist,  # float32
+            "centroids_vox": centroids_vox,  # float32
+            "centroids_phys": centroids_phys,  # float32
             "valid_h": valid_h,  # int
             "missing_mod": missing_mod  # int/bool
         }
@@ -126,12 +126,12 @@ class PatientBagDataset(Dataset):
             "ord_patient_label": p_label,
             "clouds": torch.from_numpy(data_dict["clouds"]).float(),
             "habitat_id": torch.from_numpy(data_dict["habitat_id"]).long(),
-            "dist_mat": torch.from_numpy(data_dict["phys_dist"]).float(),  # 默认用物理距离
+            "dist_mat": torch.from_numpy(data_dict["phys_dist"]).float(),
             "hab_mask": mask_h,
             "voxel_dist": torch.from_numpy(data_dict["voxel_dist"]).float(),
             "centroids_vox": torch.from_numpy(data_dict["centroids_vox"]).float(),
             "centroids_phys": torch.from_numpy(data_dict["centroids_phys"]).float(),
-            "missing_mod": torch.from_numpy(data_dict["missing_mod"])  # 如果模型需要
+            "missing_mod": torch.from_numpy(data_dict["missing_mod"])
         }
 
 
@@ -243,4 +243,5 @@ def get_data_loaders(cfg: dict):
 
 if __name__ == "__main__":
     pass
+
 
